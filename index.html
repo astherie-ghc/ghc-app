@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Green Heights Condominiums</title>
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#064e3b">
+  <script>(function(){var s=document.createElement('script');s.src='https://cdn.tailwindcss.com';s.defer=true;document.head.appendChild(s);})();</script>
+  <style>
+    :root{
+      --gh-green:#064e3b;
+      --gh-gold:#d9a412;
+      --gh-ivory:#fafaf5;
+    }
+    body { font-family: ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial; margin:0; background: var(--gh-ivory);}
+    .container { padding: 16px; }
+    .card { border:1px solid rgba(217,164,18,0.25); padding:14px; border-radius:16px; margin-bottom:12px; background:#fff; box-shadow: 0 6px 16px rgba(6,78,59,0.06); }
+    .muted { color:#6b7280; font-size: 0.9rem; }
+    .btn { padding:10px 14px; border-radius:9999px; border:1px solid rgba(217,164,18,0.45); background: linear-gradient(180deg, #fff, #f8f5ea); }
+    .btn.active { background: linear-gradient(180deg, #0b6b52, #064e3b); color:#f7e7b5; border-color: #b88e0a; }
+    .brandbar { background: linear-gradient(90deg, #064e3b, #0b6b52); color:#f6f1e1; }
+    .brandchip { color: var(--gh-gold); }
+    .goldline { border-bottom: 2px solid rgba(217,164,18,0.35); }
+  </style>
+</head>
+<body>
+  <div class="max-w-3xl mx-auto">
+    <header class="sticky top-0 z-10 backdrop-blur goldline brandbar">
+      <div class="container mx-auto px-4 py-3 flex items-center justify-between">
+        <div class="flex items-center gap-3">
+          <img src="icons/app-icon-192.png" alt="GH" class="w-9 h-9 rounded-xl ring-1 ring-[rgba(217,164,18,0.5)]">
+          <div>
+            <h1 id="siteTitle" class="text-lg font-semibold tracking-wide">Green Heights Condominiums</h1>
+            <p id="lastUpdated" class="text-xs opacity-80"></p>
+          </div>
+        </div>
+        <button id="installBtn" class="btn">Install</button>
+      </div>
+      <nav class="container mx-auto px-4 pb-3 flex gap-2 overflow-x-auto">
+        <button class="btn tabBtn active" data-tab="notices">Notices</button>
+        <button class="btn tabBtn" data-tab="memos">Memos</button>
+        <button class="btn tabBtn" data-tab="circulars">Circulars</button>
+        <button class="btn tabBtn" data-tab="jmc">JMC Org Chart</button>
+        <button class="btn tabBtn" data-tab="staff">Staff Directory</button>
+        <button class="btn tabBtn" data-tab="duty">Staff on Duty</button>
+      </nav>
+    </header>
+
+    <main class="container mx-auto px-4 py-4">
+      <section id="tab-notices" class="tabSection">
+        <div id="noticesList" class="grid gap-3"></div>
+      </section>
+      <section id="tab-memos" class="tabSection hidden">
+        <div id="memosList" class="grid gap-3"></div>
+      </section>
+      <section id="tab-circulars" class="tabSection hidden">
+        <div id="circularsList" class="grid gap-3"></div>
+      </section>
+      <section id="tab-jmc" class="tabSection hidden">
+        <div id="jmcList" class="grid gap-3"></div>
+      </section>
+      <section id="tab-staff" class="tabSection hidden">
+        <div class="mb-3">
+          <input id="staffSearch" placeholder="Search by name, dept, role..." class="w-full px-4 py-2 border rounded-xl focus:outline-none focus:ring-2 focus:ring-[rgba(217,164,18,0.5)]" />
+        </div>
+        <div id="staffList" class="grid gap-3"></div>
+      </section>
+      <section id="tab-duty" class="tabSection hidden">
+        <div class="mb-2 muted" id="todayInfo"></div>
+        <div id="dutyList" class="grid gap-3"></div>
+      </section>
+    </main>
+
+    <footer class="container mx-auto px-4 pb-8 text-center text-xs text-gray-500">
+      <p>© <span id="year"></span> Green Heights Condominiums · <span class="brandchip">Green & Gold</span></p>
+    </footer>
+  </div>
+
+  <script>
+    const tabs = document.querySelectorAll('.tabBtn');
+    const sections = {
+      notices: document.getElementById('tab-notices'),
+      memos: document.getElementById('tab-memos'),
+      circulars: document.getElementById('tab-circulars'),
+      jmc: document.getElementById('tab-jmc'),
+      staff: document.getElementById('tab-staff'),
+      duty: document.getElementById('tab-duty'),
+    };
+    tabs.forEach(btn => btn.addEventListener('click', () => {
+      tabs.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      Object.values(sections).forEach(s => s.classList.add('hidden'));
+      sections[btn.dataset.tab].classList.remove('hidden');
+    }));
+
+    let DATA = null;
+    fetch('data.json').then(r => r.json()).then(json => {
+      DATA = json;
+      document.getElementById('siteTitle').textContent = DATA.meta?.building_name || 'Green Heights Condominiums';
+      document.getElementById('lastUpdated').textContent = DATA.meta?.last_updated ? `Last updated: ${DATA.meta.last_updated}` : '';
+      document.getElementById('year').textContent = new Date().getFullYear();
+      renderAll();
+    }).catch(err => console.error('Failed to load data.json', err));
+
+    function fmtDate(iso) {
+      if(!iso) return '';
+      const d = new Date(iso + 'T00:00:00');
+      return d.toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: 'numeric' });
+    }
+    function cardHTML(title, dateStr, body) {
+      return `<article class="card">
+        <h3 class="text-base font-semibold text-[var(--gh-green)]">${title}</h3>
+        <p class="muted">${fmtDate(dateStr)}</p>
+        <p class="mt-2 text-sm leading-relaxed">${body||''}</p>
+      </article>`;
+    }
+    function renderList(arr, elId) {
+      const el = document.getElementById(elId);
+      el.innerHTML = (arr || []).sort((a,b)=> (b.date||'').localeCompare(a.date||'')).map(x=> cardHTML(x.title, x.date, x.body)).join('');
+      if(!el.innerHTML) el.innerHTML = '<p class="muted">No items yet.</p>';
+    }
+    function renderJMC() {
+      const el = document.getElementById('jmcList');
+      el.innerHTML = (DATA.jmc||[]).map(m => `
+        <div class="card">
+          <div class="flex items-center justify-between">
+            <div>
+              <h3 class="text-base font-semibold text-[var(--gh-green)]">${m.name||'<span class="opacity-50">(name)</span>'}</h3>
+              <p class="muted">${m.role||''}</p>
+            </div>
+            <div class="text-sm text-right">
+              <div>${m.phone||''}</div>
+              <div class="text-[var(--gh-gold)]">${m.email||''}</div>
+            </div>
+          </div>
+        </div>
+      `).join('');
+      if(!el.innerHTML) el.innerHTML = '<p class="muted">No JMC data yet.</p>';
+    }
+    function renderStaff() {
+      const el = document.getElementById('staffList');
+      const q = (document.getElementById('staffSearch').value || '').toLowerCase();
+      const items = (DATA.staff||[]).filter(s => {
+        const blob = [s.name, s.department, s.role, s.phone, s.email].join(' ').toLowerCase();
+        return blob.includes(q);
+      });
+      el.innerHTML = items.map(s => `
+        <div class="card">
+          <div class="flex items-center justify-between">
+            <div>
+              <h3 class="text-base font-semibold text-[var(--gh-green)]">${s.name||'<span class="opacity-50">(name)</span>'}</h3>
+              <p class="muted">${(s.role||'') + (s.department ? ' · '+s.department : '')}</p>
+            </div>
+            <div class="text-sm text-right">
+              <div>${s.phone||''}</div>
+              <div class="text-[var(--gh-gold)]">${s.email||''}</div>
+            </div>
+          </div>
+        </div>
+      `).join('');
+      if(!el.innerHTML) el.innerHTML = '<p class="muted">No staff found.</p>';
+    }
+    function renderDuty() {
+      const el = document.getElementById('dutyList');
+      const todayIso = new Date().toISOString().slice(0,10);
+      document.getElementById('todayInfo').textContent = `Today: ${fmtDate(todayIso)}`;
+      const todays = (DATA.duty_roster||[]).filter(x => x.date === todayIso);
+      const lookup = Object.fromEntries((DATA.staff||[]).map(s=>[s.id, s.name]));
+      el.innerHTML = todays.map(d => {
+        const names = (d.staff_ids||[]).map(id=> lookup[id] || id).join(', ');
+        return `<div class="card">
+          <h3 class="text-base font-semibold text-[var(--gh-green)]">${d.shift}</h3>
+          <p class="muted">${fmtDate(d.date)}</p>
+          <p class="mt-2 text-sm">On duty: ${names||'-'}</p>
+        </div>`;
+      }).join('');
+      if(!el.innerHTML) el.innerHTML = '<p class="muted">No duty roster for today.</p>';
+    }
+    function renderAll(){
+      renderList(DATA.notices, 'noticesList');
+      renderList(DATA.memos, 'memosList');
+      renderList(DATA.circulars, 'circularsList');
+      renderJMC();
+      renderStaff();
+      renderDuty();
+    }
+    document.getElementById('staffSearch').addEventListener('input', renderStaff);
+
+    if ('serviceWorker' in navigator) {{ navigator.serviceWorker.register('service-worker.js'); }}
+    let deferredPrompt=null;
+    const installBtn=document.getElementById('installBtn');
+    window.addEventListener('beforeinstallprompt', (e)=>{ e.preventDefault(); deferredPrompt=e; installBtn.style.display='inline-block'; });
+    installBtn.addEventListener('click', async ()=>{ if(!deferredPrompt) return; deferredPrompt.prompt(); await deferredPrompt.userChoice; deferredPrompt=null; installBtn.style.display='none'; });
+  </script>
+</body>
+</html>
