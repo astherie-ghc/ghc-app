@@ -1,0 +1,166 @@
+{
+  "meta": {
+    "building_name": "Green Heights Condominiums",
+    "last_updated": "2025-08-13"
+  },
+  "notices": [],
+  "memos": [],
+  "circulars": [],
+  "jmc": [
+    {
+      "name": "Claire Chew",
+      "role": "Chairman (JMC)",
+      "phone": "",
+      "email": ""
+    },
+    {
+      "name": "John Ko",
+      "role": "Secretary (JMC)",
+      "phone": "",
+      "email": ""
+    },
+    {
+      "name": "Allister Hilton Smith",
+      "role": "Treasurer (JMC)",
+      "phone": "",
+      "email": ""
+    },
+    {
+      "name": "Michael Wong",
+      "role": "Member (JMC)",
+      "phone": "",
+      "email": ""
+    },
+    {
+      "name": "Justin Ho",
+      "role": "Member (JMC)",
+      "phone": "",
+      "email": ""
+    },
+    {
+      "name": "David Sim",
+      "role": "Member (JMC)",
+      "phone": "",
+      "email": ""
+    },
+    {
+      "name": "Timothy Hatch",
+      "role": "Member (JMC)",
+      "phone": "",
+      "email": ""
+    },
+    {
+      "name": "Sally Ngu",
+      "role": "Member (JMC)",
+      "phone": "",
+      "email": ""
+    }
+  ],
+  "staff": [
+    {
+      "id": "S-301",
+      "name": "Astherie",
+      "department": "Management",
+      "role": "Building Manager",
+      "phone": "+60 19-827 5123",
+      "email": ""
+    },
+    {
+      "id": "S-101",
+      "name": "Greniston",
+      "department": "Maintenance",
+      "role": "Supervisor",
+      "phone": "+60 19-847 2840",
+      "email": ""
+    },
+    {
+      "id": "S-102",
+      "name": "Joel",
+      "department": "Maintenance",
+      "role": "Technician",
+      "phone": "+60 10-974 8671",
+      "email": ""
+    },
+    {
+      "id": "S-201",
+      "name": "Uliam",
+      "department": "Housekeeping",
+      "role": "Supervisor",
+      "phone": "+60 17-897 1659",
+      "email": ""
+    },
+    {
+      "id": "S-202",
+      "name": "Isah",
+      "department": "Housekeeping",
+      "role": "Cleaner",
+      "phone": "",
+      "email": ""
+    },
+    {
+      "id": "S-203",
+      "name": "Maya",
+      "department": "Housekeeping",
+      "role": "Cleaner",
+      "phone": "",
+      "email": ""
+    },
+    {
+      "id": "S-204",
+      "name": "Milly",
+      "department": "Housekeeping",
+      "role": "Cleaner",
+      "phone": "",
+      "email": ""
+    },
+    {
+      "id": "S-001",
+      "name": "Bodi",
+      "department": "Safety",
+      "role": "Safety Officer",
+      "phone": "+60 14-376 4103",
+      "email": ""
+    },
+    {
+      "id": "S-004",
+      "name": "Sigal",
+      "department": "Safety",
+      "role": "Safety Officer",
+      "phone": "+60 11-7018 6505",
+      "email": ""
+    },
+    {
+      "id": "S-003",
+      "name": "Justin",
+      "department": "Safety",
+      "role": "Safety Officer",
+      "phone": "+60 10-946 9412",
+      "email": ""
+    },
+    {
+      "id": "S-005",
+      "name": "John",
+      "department": "Safety",
+      "role": "Safety Officer",
+      "phone": "+60 19-437 7911",
+      "email": ""
+    },
+    {
+      "id": "S-006",
+      "name": "Jimbau",
+      "department": "Safety",
+      "role": "Safety Officer",
+      "phone": "+60 11-1925 3326",
+      "email": ""
+    },
+    {
+      "id": "S-002",
+      "name": "Andrew",
+      "department": "Safety",
+      "role": "Safety Officer",
+      "phone": "+60 11-6838 2398",
+      "email": ""
+    }
+  ],
+  "duty_roster": []
+}
